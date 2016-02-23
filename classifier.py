@@ -92,11 +92,29 @@ def PecClassfier(w, testingData):
 # 		conMatrix[predicts[x]][testSet[x][-1]] +=1
 # 	return (accuarcy/float(len(testSet)))*100
 
+def OVAperceptron(dataset, w, label):
+	for vector in dataset:
+		label = vector[-1]
+		if(label == 0 ):
+			label = -1
+		else:
+			label = 1
+		a = np.array(vector[:-1])
+		if( np.multiply(label, np.dot(a,w)) <= 0):
+			w= np.add(w, np.multiply(label, a))
+	return w
+
+def onevsall:
+	w = []
+	for i in range(10):
+		w[i] = OVAperceptron(trainingDataB, np.array([0] * 784, i)
+
+
+
 def main():
 
 	loadData()
 
-	#w = [0] * 784
 	w = np.array([0] * 784)
 	w = perceptron(trainingDataA, w)
 
