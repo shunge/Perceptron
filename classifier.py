@@ -75,36 +75,15 @@ def AvgClassifer(APec, testingData):
 			result.append([testData[:-1], 0])
 	return result
 
-# def getNeighbors(trainingData, testInput, k):
-# 	distances = []
-# 	length = len(testInput)-1
-# 	for x in range(len(trainingData)):
-# 		dist = getDistance(trainingData[x], testInput, length)
-# 		distances.append((trainingData[x], dist))
-# 	distances.sort(key=operator.itemgetter(1))
-# 	neighbors = []
-# 	for x in range(k):
-# 		neighbors.append(distances[x][0])
-# 	return neighbors
-#
-# def getDistance(trainingData, testInput, length):
-# 	distance = 0
-# 	a = np.array(trainingData[:-1])
-# 	b = np.array(testInput[:-1])
-# 	distance = np.linalg.norm(a-b)
-# 	return distance
-#
-# def getVote(neighbors):
-# 	votes = {}
-# 	for x in range(len(neighbors)):
-# 		result = neighbors[x][-1]
-# 		if result in votes:
-# 			votes[result] += 1
-# 		else:
-# 			votes[result] = 1
-# 	sortedVotes = sorted(votes.iteritems(), key=operator.itemgetter(1), reverse=True)
-# 	return sortedVotes[0][0]
-#
+def PecClassfier(w, testingData):
+	result = []
+	for testData in testingData:
+		if( np.dot(w, testData[:-1] ) >= 0):
+			result.append([testData[:-1], 6])
+		else:
+			result.append([testData[:-1], 0])
+	return result
+
 # def getAccuary(testSet, predicts, conMatrix):
 # 	accuarcy = 0
 # 	for x in range(len(testSet)):
