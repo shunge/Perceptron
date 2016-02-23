@@ -13,7 +13,7 @@ def loadData():
 	f = open('hw4atrain.txt', 'r')
 	trainingDataA = [map(int, line.split()) for line in f]
 	f = open('hw4btrain.txt', 'r')
-	trainingDataA = [map(int, line.split()) for line in f]
+	trainingDataB = [map(int, line.split()) for line in f]
 	f = open('hw4atest.txt', 'r')
 	testingDataA = [map(int, line.split()) for line in f]
 	f = open('hw4btest.txt', 'r')
@@ -53,12 +53,13 @@ def VotedClassifer(VPec, testingData):
 	sign = 0
 	result = []
 	for testData in testingData:
+		sign = 0
 		for VC in VPec:
-			#print VC[1]
 			if( np.dot(VC[0], testData[:-1] ) >= 0):
-				sign += VC[1]*1
+				sign += VC[1]
 			else:
-				sign += VC[1]*-1
+				sign += -VC[1]
+		print sign
 		if(sign >= 0 ): result.append([testData[:-1], 6])
 		else: result.append([testData[:-1], 0])
 	return result
@@ -113,14 +114,12 @@ def onevsall:
 
 =======
 def ErrorTester(result, testData):
-	print len(result)
-	print len(testData)
 	errorNum = 0
 	SumNum = 0
 	for i in range(len(result)):
-		if(result[i][1] != testData[i][:-1]):
-			errorNum += errorNum+1
-		SumNum += SumNum+1
+		if(result[i][1] != testData[i][-1]):
+			errorNum += 1
+		SumNum += 1
 	return float(errorNum)/float(SumNum)
 >>>>>>> origin/master
 
@@ -137,12 +136,12 @@ def main():
 
 	setCW = votedPecptron(trainingDataA, w)
 
-	VotedResult = VotedClassifer(setCW, trainingDataA)
+	VotedResult = VotedClassifer(setCW, testingDataA)
 	#print VotedResult
-	AvgResult = AvgClassifer(setCW, trainingDataA)
+	AvgResult = AvgClassifer(setCW, testingDataA)
 	#print AvgResult
 
-	print ErrorTester(VotedResult, testingDataA)
+	print ErrorTester(VotedResult, trainingDataA)
 	# k = 3
 	# testSet = testingData
 	# predicts = []
