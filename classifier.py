@@ -92,22 +92,32 @@ def PecClassfier(w, testingData):
 # 		conMatrix[predicts[x]][testSet[x][-1]] +=1
 # 	return (accuarcy/float(len(testSet)))*100
 
+def ErrorTester(result, testData):
+	print len(result)
+	print len(testData)
+	errorNum = 0
+	SumNum = 0
+	for i in range(len(result)):
+		if(result[i][1] != testData[i][:-1]):
+			errorNum += errorNum+1
+		SumNum += SumNum+1
+	return float(errorNum)/float(SumNum)
+
 def main():
 
 	loadData()
-
 	#w = [0] * 784
 	w = np.array([0] * 784)
 	w = perceptron(trainingDataA, w)
 
 	setCW = votedPecptron(trainingDataA, w)
-	#print setCW
 
-	VotedResult = VotedClassifer(setCW, testingDataA)
-	print VotedResult
-	AvgResult = AvgClassifer(setCW, testingDataA)
-	print AvgResult
+	VotedResult = VotedClassifer(setCW, trainingDataA)
+	#print VotedResult
+	AvgResult = AvgClassifer(setCW, trainingDataA)
+	#print AvgResult
 
+	print ErrorTester(VotedResult, testingDataA)
 	# k = 3
 	# testSet = testingData
 	# predicts = []
