@@ -29,8 +29,26 @@ def perceptron(dataset,w):
 		a = np.array(vector[:-1])
 		if( np.multiply(label, np.dot(a,w)) <= 0):
 			w= np.add(w, np.multiply(label, a))
-			print w
+	return w
 
+def votedPecptron(dataset, w):
+	c = 1
+	setCW = []
+	for vector in dataset:
+		label = vector[-1]
+		if(label == 0 ):
+			label = -1
+		else:
+			label = 1
+		a = np.array(vector[:-1])
+		if( np.multiply(label, np.dot(a,w)) <= 0):
+			setCW.append([w,c])
+			w= np.add(w, np.multiply(label, a))
+			c = 1
+
+		else:
+			c = c+1
+	return  setCW
 
 # def getNeighbors(trainingData, testInput, k):
 # 	distances = []
@@ -76,9 +94,12 @@ def main():
 
 	#w = [0] * 784
 	w = np.array([0] * 784)
-	perceptron(trainingDataA, w)
+	w = perceptron(trainingDataA, w)
 	print w
 
+	setCW = []
+	setCW = votedPecptron(trainingDataA, w)
+	print setCW
 	# k = 3
 	# testSet = testingData
 	# predicts = []
