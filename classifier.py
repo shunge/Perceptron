@@ -50,6 +50,16 @@ def votedPecptron(dataset, w):
 			c = c+1
 	return  setCW
 
+def VotedClassifer(VPec, testingData):
+	sign = 0
+	for testData in testingData:
+		for VC in VPec:
+			sign += VC[1]*np.dot(VC[0], testData)
+	return sign
+
+def AvgClassifer(APec, testingData):
+	return
+
 # def getNeighbors(trainingData, testInput, k):
 # 	distances = []
 # 	length = len(testInput)-1
@@ -100,6 +110,8 @@ def main():
 	setCW = []
 	setCW = votedPecptron(trainingDataA, w)
 	print setCW
+
+	print VotedClassifer(testingDataA, setCW)
 	# k = 3
 	# testSet = testingData
 	# predicts = []
