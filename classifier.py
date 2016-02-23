@@ -45,20 +45,35 @@ def votedPecptron(dataset, w):
 			setCW.append([w,c])
 			w= np.add(w, np.multiply(label, a))
 			c = 1
-
 		else:
 			c = c+1
 	return  setCW
 
 def VotedClassifer(VPec, testingData):
 	sign = 0
+	result = []
 	for testData in testingData:
 		for VC in VPec:
-			sign += VC[1]*np.dot(VC[0], testData)
-	return sign
+			#print VC[1]
+			if( np.dot(VC[0], testData[:-1] ) >= 0):
+				sign += VC[1]*1
+			else:
+				sign += VC[1]*-1
+		if(sign >= 0 ): result.append([testData[:-1], 6])
+		else: result.append([testData[:-1], 0])
+	return result
 
 def AvgClassifer(APec, testingData):
-	return
+	result = []
+	WSum = [0] * 784
+	for VC in APec:
+		WSum += np.multiply(VC[:-1],VC[-1])
+	for testData in testingData:
+		if( np.dot(WSum, testData[:-1] ) >= 0):
+			result.append([testData[:-1], 6])
+		else:
+			result.append([testData[:-1], 0])
+	return result
 
 # def getNeighbors(trainingData, testInput, k):
 # 	distances = []
@@ -105,13 +120,15 @@ def main():
 	#w = [0] * 784
 	w = np.array([0] * 784)
 	w = perceptron(trainingDataA, w)
-	print w
 
-	setCW = []
 	setCW = votedPecptron(trainingDataA, w)
-	print setCW
+	#print setCW
 
-	print VotedClassifer(testingDataA, setCW)
+	VotedResult = VotedClassifer(setCW, testingDataA)
+	print VotedResult
+	AvgResult = AvgClassifer(setCW, testingDataA)
+	print AvgResult
+
 	# k = 3
 	# testSet = testingData
 	# predicts = []
