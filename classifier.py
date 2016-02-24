@@ -13,7 +13,7 @@ def loadData():
 	f = open('hw4atrain.txt', 'r')
 	trainingDataA = [map(int, line.split()) for line in f]
 	f = open('hw4btrain.txt', 'r')
-	trainingDataA = [map(int, line.split()) for line in f]
+	trainingDataB = [map(int, line.split()) for line in f]
 	f = open('hw4atest.txt', 'r')
 	testingDataA = [map(int, line.split()) for line in f]
 	f = open('hw4btest.txt', 'r')
@@ -92,26 +92,67 @@ def PecClassfier(w, testingData):
 # 		conMatrix[predicts[x]][testSet[x][-1]] +=1
 # 	return (accuarcy/float(len(testSet)))*100
 
-<<<<<<< HEAD
-def OVAperceptron(dataset, w, label):
+def OVAPecClassfier(w, testingData):
+	if (np.dot(w, testingData[:-1]) >= 0):
+		return 1
+	else:
+		return 0
+
+
+def OVAperceptron(dataset, w, l):
 	for vector in dataset:
 		label = vector[-1]
-		if(label == 0 ):
-			label = -1
-		else:
+		if(label == l ):
 			label = 1
+		else:
+			label = -1
 		a = np.array(vector[:-1])
 		if( np.multiply(label, np.dot(a,w)) <= 0):
 			w= np.add(w, np.multiply(label, a))
 	return w
 
-def onevsall:
+def onevsall():
+	loadData()
 	w = []
 	for i in range(10):
-		w[i] = OVAperceptron(trainingDataB, np.array([0] * 784, i)
+		w.append(OVAperceptron(trainingDataB, np.array([0] * 784), i))
+	matrix = [[0 for i in range(10)] for j in range(11)]
 
+	n = [0 for i in range(10)]
+	for i in range(len(testingDataB)):
+		n[testingDataB[i][-1]] += 1
 
-=======
+	for data in testingDataB:
+		know = False 
+		for i in range(10):
+			result = 0
+			mark = -1
+			for j in range(10):
+				if(OVAPecClassfier(w[j], data) == 1):
+					mark = j
+				result += OVAPecClassfier(w[j], data) 
+			if(result == 1 and mark == i):
+				matrix[i][data[-1]] += 1
+				know = True
+				break;
+		if(know == False):
+			matrix[10][data[-1]] += 1
+
+	for i in range(11):
+		for j in range(10):
+			matrix[i][j] = float(matrix[i][j]) / float(n[j])
+	
+	print '   ',
+	for i in range(len(matrix[i])):
+		print '{:4}'.format(i),
+	print ' '
+	for i in range(len(matrix)):
+		print (str(i)+"|"),
+		print ' ',
+		for j in range(len(matrix[i])):
+			print '{:4.2f}'.format((matrix[i][j])),
+		print ' '
+
 def ErrorTester(result, testData):
 	print len(result)
 	print len(testData)
@@ -122,16 +163,11 @@ def ErrorTester(result, testData):
 			errorNum += errorNum+1
 		SumNum += SumNum+1
 	return float(errorNum)/float(SumNum)
->>>>>>> origin/master
 
 def main():
 
 	loadData()
-<<<<<<< HEAD
 
-=======
-	#w = [0] * 784
->>>>>>> origin/master
 	w = np.array([0] * 784)
 	w = perceptron(trainingDataA, w)
 
@@ -176,4 +212,5 @@ def main():
     #
 	# print("accuarcy: "+repr(accuarcy) +"%")
 
-main()
+#main()
+onevsall()
