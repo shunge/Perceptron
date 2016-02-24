@@ -31,8 +31,9 @@ def perceptron(dataset,w):
 			w= np.add(w, np.multiply(label, a))
 	return w
 
-def votedPecptron(dataset, w):
+def votedPecptron(dataset):
 	c = 1
+	w = np.array([0] * 784)
 	setCW = []
 	for vector in dataset:
 		label = vector[-1]
@@ -59,6 +60,7 @@ def VotedClassifer(VPec, testingData):
 				sign += VC[1]
 			else:
 				sign += -VC[1]
+
 		print sign
 		if(sign >= 0 ): result.append([testData[:-1], 6])
 		else: result.append([testData[:-1], 0])
@@ -93,7 +95,6 @@ def PecClassfier(w, testingData):
 # 		conMatrix[predicts[x]][testSet[x][-1]] +=1
 # 	return (accuarcy/float(len(testSet)))*100
 
-<<<<<<< HEAD
 def OVAperceptron(dataset, w, label):
 	for vector in dataset:
 		label = vector[-1]
@@ -106,13 +107,11 @@ def OVAperceptron(dataset, w, label):
 			w= np.add(w, np.multiply(label, a))
 	return w
 
-def onevsall:
-	w = []
-	for i in range(10):
-		w[i] = OVAperceptron(trainingDataB, np.array([0] * 784, i)
+# def onevsall:
+# 	w = []
+# 	for i in range(10):
+# 		w[i] = OVAperceptron(trainingDataB, np.array([0] * 784, i), i)
 
-
-=======
 def ErrorTester(result, testData):
 	errorNum = 0
 	SumNum = 0
@@ -121,27 +120,22 @@ def ErrorTester(result, testData):
 			errorNum += 1
 		SumNum += 1
 	return float(errorNum)/float(SumNum)
->>>>>>> origin/master
 
 def main():
 
 	loadData()
-<<<<<<< HEAD
-
-=======
-	#w = [0] * 784
->>>>>>> origin/master
 	w = np.array([0] * 784)
 	w = perceptron(trainingDataA, w)
 
-	setCW = votedPecptron(trainingDataA, w)
+	setCW = votedPecptron(trainingDataA)
 
 	VotedResult = VotedClassifer(setCW, testingDataA)
 	#print VotedResult
 	AvgResult = AvgClassifer(setCW, testingDataA)
 	#print AvgResult
+	PecResult = PecClassfier(w, testingDataA)
 
-	print ErrorTester(VotedResult, trainingDataA)
+	print ErrorTester(PecResult, testingDataA)
 	# k = 3
 	# testSet = testingData
 	# predicts = []
