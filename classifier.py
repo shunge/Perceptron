@@ -31,8 +31,9 @@ def perceptron(dataset,w):
 			w= np.add(w, np.multiply(label, a))
 	return w
 
-def votedPecptron(dataset, w):
+def votedPecptron(dataset):
 	c = 1
+	w = np.array([0] * 784)
 	setCW = []
 	for vector in dataset:
 		label = vector[-1]
@@ -53,12 +54,14 @@ def VotedClassifer(VPec, testingData):
 	sign = 0
 	result = []
 	for testData in testingData:
+		sign = 0
 		for VC in VPec:
-			#print VC[1]
 			if( np.dot(VC[0], testData[:-1] ) >= 0):
-				sign += VC[1]*1
+				sign += VC[1]
 			else:
-				sign += VC[1]*-1
+				sign += -VC[1]
+
+		print sign
 		if(sign >= 0 ): result.append([testData[:-1], 6])
 		else: result.append([testData[:-1], 0])
 	return result
@@ -100,16 +103,6 @@ def OVAPecClassfier(w, testingData):
 
 
 def OVAperceptron(dataset, w, l):
-	for vector in dataset:
-		label = vector[-1]
-		if(label == l ):
-			label = 1
-		else:
-			label = -1
-		a = np.array(vector[:-1])
-		if( np.multiply(label, np.dot(a,w)) <= 0):
-			w= np.add(w, np.multiply(label, a))
-	return w
 
 def onevsall():
 	loadData()
@@ -153,15 +146,14 @@ def onevsall():
 			print '{:4.2f}'.format((matrix[i][j])),
 		print ' '
 
+
 def ErrorTester(result, testData):
-	print len(result)
-	print len(testData)
 	errorNum = 0
 	SumNum = 0
 	for i in range(len(result)):
-		if(result[i][1] != testData[i][:-1]):
-			errorNum += errorNum+1
-		SumNum += SumNum+1
+		if(result[i][1] != testData[i][-1]):
+			errorNum += 1
+		SumNum += 1
 	return float(errorNum)/float(SumNum)
 
 def main():
@@ -171,14 +163,15 @@ def main():
 	w = np.array([0] * 784)
 	w = perceptron(trainingDataA, w)
 
-	setCW = votedPecptron(trainingDataA, w)
+	setCW = votedPecptron(trainingDataA)
 
-	VotedResult = VotedClassifer(setCW, trainingDataA)
+	VotedResult = VotedClassifer(setCW, testingDataA)
 	#print VotedResult
-	AvgResult = AvgClassifer(setCW, trainingDataA)
+	AvgResult = AvgClassifer(setCW, testingDataA)
 	#print AvgResult
+	PecResult = PecClassfier(w, testingDataA)
 
-	print ErrorTester(VotedResult, testingDataA)
+	print ErrorTester(PecResult, testingDataA)
 	# k = 3
 	# testSet = testingData
 	# predicts = []
