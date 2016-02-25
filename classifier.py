@@ -19,16 +19,17 @@ def loadData():
 	f = open('hw4btest.txt', 'r')
 	testingDataB = [map(int, line.split()) for line in f]
 
-def perceptron(dataset,w):
-	for vector in dataset:
-		label = vector[-1]
-		if(label == 0 ):
-			label = -1
-		else:
-			label = 1
-		a = np.array(vector[:-1])
-		if( np.multiply(label, np.dot(a,w)) <= 0):
-			w= np.add(w, np.multiply(label, a))
+def perceptron(dataset,w, num):
+	for i in range(num):
+		for vector in dataset:
+			label = vector[-1]
+			if(label == 0 ):
+				label = -1
+			else:
+				label = 1
+			a = np.array(vector[:-1])
+			if( np.multiply(label, np.dot(a,w)) <= 0):
+				w= np.add(w, np.multiply(label, a))
 	return w
 
 def votedPecptron(dataset, w, num):
@@ -169,19 +170,20 @@ def ErrorTester(result, testData):
 def main():
 	loadData()
 	w = np.array([0] * 784)
-	w = perceptron(trainingDataA, w)
+	w = perceptron(trainingDataA, w, 3)
 
 	newW =  np.array([0] * 784)
-	setCW = votedPecptron(trainingDataA, newW, 1)
+	setCW = votedPecptron(trainingDataA, newW, 3)
 
 	VotedResult = VotedClassifer(setCW, testingDataA)
 
 	AvgResult = AvgClassifer(setCW, testingDataA)
 
-	PecResult = PecClassfier(w, trainingDataA)
+	PecResult = PecClassfier(w, testingDataA)
 
-	print ErrorTester(VotedResult,testingDataA)
-
+	print "Perceptron", ErrorTester(PecResult,testingDataA)
+	print "Voted", ErrorTester(VotedResult,testingDataA)
+	print "Avg", ErrorTester(AvgResult,testingDataA)
 
 main()
 #onevsall()
